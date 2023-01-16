@@ -50,11 +50,37 @@ router.get('/details/:movieId', async (req, res, next) => {
 });
 
 // GET delete movie
+// ROUTE: /movies/delete/:movieId
 router.get('/delete/:movieId', async (req, res, next) => {
     const { movieId } = req.params;
     try {
         await Movie.findByIdAndDelete(movieId);
         res.redirect('/movies');
+    } catch (error) {
+        next(error);
+    }
+});
+
+// GET for edit movie
+// ROUTE: /movies/edit/:movieId
+router.get('/edit/:movieId', async (req, res, next) => {
+    const { movieId } = req.params;
+    try {
+        const movie = await Movie.findById(movieId).populate('cast');
+        res.render('movies/edit-movie', movie);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// POST for edit movie
+// ROUTE: /movies/edit/:movieId
+router.post('/edit/:movieId', async (req, res, next) => {
+    const { movieId } = req.params;
+    const { title, genre, plot, cast } = req.body;
+    try {
+        await Movie.findByIdAndUpdate(movieId, { title, genre, plot, cast });
+        res.redirect(`/movies/details/${movieId}`);
     } catch (error) {
         next(error);
     }
