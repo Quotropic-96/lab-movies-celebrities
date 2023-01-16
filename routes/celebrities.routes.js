@@ -4,8 +4,13 @@ const Celebrity = require('../models/Celebrity.model');
 
 // GET all celebrities
 // ROUTE: /celebrities
-router.get('/', (req, res, next) => {
-    res.render('celebrities/celebrities');
+router.get('/', async (req, res, next) => {
+    try {
+        const celebrities = await Celebrity.find();
+        res.render('celebrities/celebrities', { celebrities });
+    } catch (error) {
+        next(error);
+    }
 });
 
 // GET form for new celebrity
