@@ -47,5 +47,17 @@ router.get('/details/:movieId', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+});
+
+// GET delete movie
+router.get('/delete/:movieId', async (req, res, next) => {
+    const { movieId } = req.params;
+    try {
+        await Movie.findByIdAndDelete(movieId);
+        res.redirect('/movies');
+    } catch (error) {
+        next(error);
+    }
 })
+
 module.exports = router;
